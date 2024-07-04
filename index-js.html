@@ -1,0 +1,235 @@
+<script>
+    const iconLoading = document.getElementById("loading");
+    let allUser = [];
+    document.addEventListener("DOMContentLoaded", () => {
+        getAllUser();
+        innerHTML();
+        const selectMSSV = document.getElementById("selectMSSV");
+        const displayName = document.getElementById("displayName");
+        const checkBtn = document.getElementById("check_btn");
+        const inputMSSV = document.getElementById("inforMSSV");
+        const inputName = document.getElementById("inforName");
+        const inputEmail = document.getElementById("inforEmail");
+        const inputPhone = document.getElementById("inforPhone");
+        const confirmBtn = document.getElementById('confirm_btn');
+        const closeBtn = document.getElementById('close_btn');
+        const closeBtn2 = document.getElementById('close_btn2');
+        const closeBtn3 = document.getElementById('close_btn3');
+        const checkBtnHome = document.getElementById('check_btnHome');
+        const signUpCalendarBtnHome = document.getElementById('signUpCalendar_btnHome');
+        const takeLeaveBtnHome = document.getElementById('takeLeave_btnHome');
+        const takeLeaveBtn = document.getElementById('takeLeave_btn');
+        const inputName2 = document.getElementById("inforName2");
+        const inputMSSV2 = document.getElementById("inforMSSV2");
+        const inputDate = document.getElementById("date");
+        const inputReason = document.getElementById("reason");
+        let inputTime = "";
+        let checkboxes = document.querySelectorAll('input[type=checkbox][name="answer"]');
+
+        selectMSSV?.addEventListener("change", function (e) {
+            e.preventDefault();
+            let mssv = this.value;
+            let sinhVien = allUser.find(function (data) {
+                return data.mssv == mssv;
+            });
+            if (sinhVien) {
+                displayName.value = sinhVien.name;
+            }
+        });
+
+        checkBtnHome.addEventListener("click", showMain);
+        closeBtn.addEventListener("click", hideMain);
+        checkBtn?.addEventListener("click", (e) => {
+            e.preventDefault();
+            check(selectMSSV.value);
+        });
+        signUpCalendarBtnHome.addEventListener('click', showDangkylich);
+        closeBtn2.addEventListener('click', hideDangkylich);
+        confirmBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            themDuLieu(inputMSSV, inputName, inputEmail, inputPhone);
+        });
+        takeLeaveBtnHome.addEventListener('click', showXinnghi);
+        closeBtn3.addEventListener('click', hideXinnghi);
+
+        takeLeaveBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            checkboxes.forEach(function (checkbox) {
+                if (checkbox.checked) {
+                    inputTime = inputTime + `${checkbox.nextSibling.textContent.trim()}`;
+
+                }
+            });
+            takeLeave(inputMSSV2, inputName2, inputDate, inputTime, inputReason);
+            inputTime = "";
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+        });
+    })
+
+    function mssvHTML() {
+        let mssv = allUser.map(function (user) {
+            return `<option disabled selected hidden>Mã số sinh viên</option> 
+                          <option> ${user.mssv} </option>`
+        });
+        return mssv.join(' ');
+    }
+    async function getAllUser() {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbycuCiYtzGzps2T2U6P9Xlj4Ns-xO4YfdFZ1MUtNe5IiqMEkf0xWTi72peq3yZf5Pk3/exec?getAllUser=allUser");
+        const data = await response.json();
+        allUser = data;
+        selectMSSV.innerHTML = mssvHTML();
+    }
+
+    async function check(mssv) {
+        showLoading();
+        let url = "https://script.google.com/macros/s/AKfycbycuCiYtzGzps2T2U6P9Xlj4Ns-xO4YfdFZ1MUtNe5IiqMEkf0xWTi72peq3yZf5Pk3/exec";
+        const response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify({ "check": mssv }),
+        });
+        const data = await response.json();
+        if (data) {
+            hideLoading();
+            console.log(data);
+            swal("", data, "success");
+            selectMSSV.innerHTML = mssvHTML();
+            displayName.value = "";
+        }
+
+    }
+    const home = document.querySelector('.js-home');
+    const main = document.querySelector('.js-main');
+    const dangky = document.querySelector('.js-dangky');
+    const xinnghi = document.querySelector('.js-xinnghi');
+    function showDangkylich() {
+        dangky.classList.add('open');
+        home.classList.add('close');
+    }
+    function hideDangkylich() {
+        dangky.classList.remove('open');
+        home.classList.remove('close');
+        // getData();
+    }
+    function showMain() {
+        home.classList.add('close');
+        main.classList.add('open');
+    }
+    function hideMain() {
+        home.classList.remove('close');
+        main.classList.remove('open');
+    }
+    function showXinnghi() {
+        xinnghi.classList.add('open');
+        home.classList.add('close');
+    }
+    function hideXinnghi() {
+        xinnghi.classList.remove('open');
+        home.classList.remove('close');
+    }
+    const select = `<select> 
+                    <option  selected ></option>
+                    <option>Đăng ký VP</option>
+                    <option>Đăng ký C7</option>
+                  </select>`;
+    const trList = document.querySelectorAll('tr');
+    function innerHTML() {
+        trList.forEach((tr, index) => {
+            if (index > 0) {
+                const tdList = tr.querySelectorAll('td');
+                tdList.forEach((td, i) => {
+                    if (i > 0) {
+                        td.innerHTML = select;
+                    }
+                });
+            }
+        })
+    }
+
+    async function themDuLieu(inputMSSV, inputName, inputEmail, inputPhone) {
+        let list = [];
+        let selectList = document.querySelectorAll('select');
+        selectList.forEach((select, index) => {
+            if (index > 0) {
+                list.push(select.value);
+            }
+        })
+        let count = 0;
+        list.forEach((e) => {
+            if (e !== "") {
+                count++;
+            }
+        })
+
+        if (!(inputMSSV.value && inputName.value && inputEmail.value && inputPhone.value)) {
+            alert("Bạn điền thiếu thông tin");
+        }
+        else if (count <= 2) {
+            alert("Bạn cần chọn số buổi lớn hơn 2");
+        }
+        else {
+            const data = {
+                mssv: inputMSSV.value,
+                yourName: inputName.value,
+                yourEmail: inputEmail.value,
+                yourPhone: inputPhone.value,
+                list: list
+            }
+            // const signUp = JSON.stringify(data);
+            showLoading();
+            let url = "https://script.google.com/macros/s/AKfycbycuCiYtzGzps2T2U6P9Xlj4Ns-xO4YfdFZ1MUtNe5IiqMEkf0xWTi72peq3yZf5Pk3/exec";
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ "data": data }),
+            });
+            const data2 = await response.json();
+            if (data2) {
+                hideLoading();
+                swal("", data2, "success");
+                inputMSSV.value = "";
+                inputName.value = "";
+                inputEmail.value = "";
+                inputPhone.value = "";
+                innerHTML();
+                getAllUser();
+            }
+
+        }
+    }
+    const showLoading = () => {
+        iconLoading.style.display = "flex";
+    };
+    const hideLoading = () => {
+        iconLoading.style.display = "none";
+    };
+    async function takeLeave(inputMSSV2, inputName2, inputDate, inputTime, inputReason) {
+        if (!(inputMSSV2.value && inputName2.value && inputDate.value && inputTime != "" && inputReason.value)) {
+            alert("Bạn điền thiếu thông tin");
+        } else {
+            const data = {
+                mssv: inputMSSV2.value,
+                yourName: inputName2.value,
+                date: inputDate.value,
+                time: inputTime,
+                reason: inputReason.value
+            }
+            // const signUp = JSON.stringify(data);
+            showLoading();
+            let url = "https://script.google.com/macros/s/AKfycbycuCiYtzGzps2T2U6P9Xlj4Ns-xO4YfdFZ1MUtNe5IiqMEkf0xWTi72peq3yZf5Pk3/exec";
+            const response = await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ "takeLeave": data }),
+            });
+            const data2 = await response.json();
+            if (data2) {
+                hideLoading();
+                swal("", data2, "success");
+                inputMSSV2.value = "";
+                inputName2.value = "";
+                inputDate.value = "";
+                inputReason.value = "";
+            }
+        }
+    }
+</script>

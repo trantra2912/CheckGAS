@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <?!= include('css'); ?>
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limontesweetalert2/7.2.0/sweetalert2.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
+</head>
+
+<body>
+    <div class="loading" id="loading">
+        <img src="https://i.gifer.com/YlWC.gif" alt="loading">
+    </div>
+    <div class="home js-home">
+        <h1 style="color: #ffb800"> SANSLab</h1>
+        <div class="btn">
+            <button id="check_btnHome" class=" ">Điểm danh</button>
+            <button id="signUpCalendar_btnHome" class="">Đăng ký lịch</button>
+            <button id="takeLeave_btnHome" class="">Xin nghỉ</button>
+        </div>
+    </div>
+    <div class="main js-main">
+        <h2> Điểm danh</h2>
+        <select id="selectMSSV" class="input-MSSV ">
+            <option disabled selected hidden>Mã số sinh viên</option>
+            <select>
+                <input id="displayName" class="input-Name " type="text" placeholder="Họ và tên" readonly disabled>
+                <div class="btn">
+                    <button id="check_btn" class=" ">Điểm danh</button>
+                    <button id="close_btn" class="js-close_btn">Đóng</button>
+                </div>
+    </div>
+
+    <div class="dangky js-dangky">
+        <div>
+            <h2 style="color: #ffb800">Đăng ký lịch</h2>
+        </div>
+        <div class="form">
+            <div>
+                <input id="inforMSSV" type="text" placeholder="Mã số sinh viên" />
+                <input id="inforName" type="text" placeholder="Họ và tên" />
+                <input id="inforEmail" type="email" placeholder="Địa chỉ email" />
+                <input id="inforPhone" type="tel" pattern="[0-9]" placeholder="Số điện thoại" />
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <th>Thứ</th>
+                        <th>Sáng</th>
+                        <th>Chiều</th>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>CN</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="btn">
+            <button id="confirm_btn" class="js-confirm_btn">Đăng ký</button>
+            <button id="close_btn2" class="js-close_btn">Đóng</button>
+        </div>
+
+    </div>
+
+    <div class="xinnghi js-xinnghi">
+        <div>
+            <h2 style="color: #ffb800">Xin nghỉ</h2>
+        </div>
+        <div class="form">
+            <div>
+                <input id="inforMSSV2" type="text" placeholder="Mã số sinh viên" />
+                <input id="inforName2" type="text" placeholder="Họ và tên" />
+            </div>
+            <div>
+                <div class="control">
+                    <input id="date" type="date" placeholder="Ngày xin nghỉ" />
+                    <div>
+                        <label class="checkbox">
+                            <input type="checkbox" name="answer" />
+                            Sáng
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="answer" />
+                            Chiều
+                        </label>
+                    </div>
+                </div>
+                <textarea id="reason" type="text" placeholder="Lý do xin nghỉ"></textarea>
+            </div>
+        </div>
+        <div class="btn">
+            <button id="takeLeave_btn" class="js-confirm_btn">Xin nghỉ</button>
+            <button id="close_btn3" class="js-close_btn">Đóng</button>
+        </div>
+        <?!= include('index-js'); ?>
+</body>
+
+</html>
